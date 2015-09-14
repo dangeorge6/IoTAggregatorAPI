@@ -1,0 +1,107 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+    }
+}
+
+apply plugin: "idea"
+apply plugin: "groovy"
+apply plugin: "spring-boot"
+apply plugin: "jacoco"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+version = '0.0'
+mainClassName = "com.shoppertrak.exampleappname.Main"
+
+def appName = "Example Application Name"
+def jarFilename = System.properties["JAR_FILENAME"]
+def version2 = System.env.BUILD_NUMBER ? System.env.BUILD_NUMBER : System.env.USERNAME
+def builtBy = System.env.BUILD_TAG ? "jenkins" : System.env.USERNAME
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = compileJava.destinationDir
+        testOutputDir = compileTestJava.destinationDir
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        html.enabled true
+        csv.enabled false
+    }
+}
+
+repositories {
+    maven { url "http://repo.rctanalytics.com/artifactory/repo" }
+    mavenLocal()
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        resources.excludes = ["*.jar"]
+    }
+    integrationTest {
+        java.srcDir file("src/integrationTest/groovy")
+        resources.srcDir file("src/integrationTest/resources")
+    }
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+// This is required for Jenkins to run the unit tests
+test.dependsOn integrationTest
+
+def springBootVersion = "1.2.5.RELEASE"
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "org.codehaus.groovy:groovy-all:2.4.4"
+    compile "com.zaxxer:HikariCP-java6:2.3.9"
+
+    compile("com.shoppertrak:application-build-info:1.0.0")
+
+    compile files(
+            "src/main/resources/ojdbc7.jar"
+    )
+
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    testCompile "cglib:cglib-nodep:3.1"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+
+    integrationTestCompile sourceSets.main.output
+    integrationTestCompile configurations.testCompile
+    integrationTestCompile sourceSets.test.output
+    integrationTestRuntime configurations.testRuntime
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.5"
+}
+
+jar {
+    archiveName = jarFilename
+
+    manifest {
+        attributes([
+                'Implementation-Date'   : new Date(),
+                'Implementation-Title'  : appName,
+                'Implementation-Vendor' : "ShopperTrak RCT, INC.",
+                'Implementation-Version': version + "." + version2,
+                'Built-By'              : builtBy,
+                'Build-Date'            : new Date()
+        ])
+    }
+}

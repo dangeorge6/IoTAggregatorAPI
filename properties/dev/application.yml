@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+version:
+  info:
+    app:
+      name: Example Application Name
+
+management:
+  port: 9000
+  context-path: /application
+
+endpoints:
+  health:
+    sensitive: false
+  info:
+    enabled: false
+
+spring:
+  datasource:
+    driverClassName: oracle.jdbc.driver.OracleDriver
+    max-active: 5
+    initial-size: 1
+    max-idle: 5
+    min-idle: 1
+    validation-query: select 1 from dual
