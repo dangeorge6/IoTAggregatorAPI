@@ -2,6 +2,8 @@
 .git
 .gradle
 build
-/secure.properties
-/application.yml
+*.properties
+*.yml
 *.iml
+*.ipr
+*.iws
