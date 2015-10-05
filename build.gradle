@@ -12,8 +12,8 @@ apply plugin: "groovy"
 apply plugin: "spring-boot"
 apply plugin: "jacoco"
 
-version = '0.0'
 mainClassName = "com.shoppertrak.examplews.Main"
+def version = '0.0'
 def appName = "Example Web Service"
 def jarFilename = "ExampleWS.jar"
 def springBootVersion = "1.2.5.RELEASE"

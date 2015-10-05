@@ -4,7 +4,6 @@ import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
 import ch.qos.logback.core.status.OnConsoleStatusListener
-
 // For syntax, see http://logback.qos.ch/manual/groovy.html
 // Logging detail levels: TRACK > DEBUG > INFO > WARN > ERROR
 

@@ -4,8 +4,6 @@ import com.shoppertrak.exampleappname.service.ExampleService
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.actuate.metrics.CounterService
-import org.springframework.boot.autoconfigure.security.SecurityProperties
-import org.springframework.context.annotation.Bean
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
@@ -38,13 +36,5 @@ class ExampleController {
         } finally {
             counterService.decrement(ACTIVE_REQUESTS_STAT)
         }
-    }
-
-    // This will turn off security so that controller does not require authentication
-    @Bean
-    public SecurityProperties securityProperties() {
-        SecurityProperties security = new SecurityProperties()
-        security.getBasic().setPath("")
-        return security
     }
 }

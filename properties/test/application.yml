@@ -12,6 +12,10 @@ endpoints:
   mappings:
     sensitive: false
 
+security:
+  basic:
+    enabled: false
+
 spring:
   datasource:
     driverClassName: oracle.jdbc.driver.OracleDriver
