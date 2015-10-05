@@ -8,8 +8,7 @@ import ch.qos.logback.core.status.OnConsoleStatusListener
 // For syntax, see http://logback.qos.ch/manual/groovy.html
 // Logging detail levels: TRACK > DEBUG > INFO > WARN > ERROR
 
-def appName = "ExampleAppName"
-def logPath = "/opt/application/logs/${appName}.log"
+def logPath = "/opt/application/logs/app.log"
 def logPattern = "%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{66} - %msg%n"
 
 displayStatusOnConsole()

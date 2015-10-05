@@ -12,16 +12,17 @@ apply plugin: "groovy"
 apply plugin: "spring-boot"
 apply plugin: "jacoco"
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
 version = '0.0'
-mainClassName = "com.shoppertrak.exampleappname.Main"
+mainClassName = "com.shoppertrak.examplews.Main"
+def appName = "Example Web Service"
+def jarFilename = "ExampleWS.jar"
+def springBootVersion = "1.2.5.RELEASE"
 
-def appName = "Example Application Name"
-def jarFilename = System.properties["JAR_FILENAME"]
 def version2 = System.env.BUILD_NUMBER ? System.env.BUILD_NUMBER : System.env.USERNAME
 def builtBy = System.env.BUILD_TAG ? "jenkins" : System.env.USERNAME
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 idea {
     module {
@@ -63,15 +64,14 @@ task integrationTest(type: Test) {
 // This is required for Jenkins to run the unit tests
 test.dependsOn integrationTest
 
-def springBootVersion = "1.2.5.RELEASE"
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
+
     compile "org.codehaus.groovy:groovy-all:2.4.4"
     compile "com.zaxxer:HikariCP-java6:2.3.9"
-
-    compile("com.shoppertrak:application-build-info:1.0.0")
 
     compile files(
             "src/main/resources/ojdbc7.jar"
@@ -91,17 +91,17 @@ task wrapper(type: Wrapper) {
     gradleVersion = "2.5"
 }
 
+processResources {
+    expand([
+            appName           : appName,
+            appVendor         : "ShopperTrak RCT, INC.",
+            builtBy           : builtBy,
+            buildDate         : new Date(),
+            implementationDate: new Date(),
+            versionString     : version + "." + version2
+    ])
+}
+
 jar {
     archiveName = jarFilename
-
-    manifest {
-        attributes([
-                'Implementation-Date'   : new Date(),
-                'Implementation-Title'  : appName,
-                'Implementation-Vendor' : "ShopperTrak RCT, INC.",
-                'Implementation-Version': version + "." + version2,
-                'Built-By'              : builtBy,
-                'Build-Date'            : new Date()
-        ])
-    }
 }

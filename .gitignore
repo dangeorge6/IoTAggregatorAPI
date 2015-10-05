@@ -2,8 +2,9 @@
 .git
 .gradle
 build
-*.properties
-*.yml
-*.iml
-*.ipr
-*.iws
+/*.iml
+/*.ipr
+/*.iws
+/*.properties
+/*.yml
+/logback.groovy

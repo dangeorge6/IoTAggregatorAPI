@@ -1,20 +1,16 @@
 server:
   port: 8080
 
-version:
-  info:
-    app:
-      name: Example Application Name
-
 management:
   port: 9000
-  context-path: /application
 
 endpoints:
   health:
     sensitive: false
-  info:
-    enabled: false
+  metrics:
+    sensitive: false
+  mappings:
+    sensitive: false
 
 spring:
   datasource:
