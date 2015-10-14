@@ -1,10 +1,12 @@
 .idea
 .git
 .gradle
+bin
 build
 /*.iml
 /*.ipr
 /*.iws
-/*.properties
-/*.yml
 /logback.groovy
+.settings
+.classpath
+.project

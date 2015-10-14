@@ -8,14 +8,15 @@ buildscript {
 }
 
 apply plugin: "idea"
+apply plugin: "eclipse"
 apply plugin: "groovy"
 apply plugin: "spring-boot"
 apply plugin: "jacoco"
 
-mainClassName = "com.shoppertrak.examplews.Main"
+mainClassName = "com.shoppertrak.Main"
 def version = '0.0'
-def appName = "Example Web Service"
-def jarFilename = "ExampleWS.jar"
+def appName = "StoreInfo Web Service"
+def jarFilename = "StoreInfoWS.jar"
 def springBootVersion = "1.2.5.RELEASE"
 
 def version2 = System.env.BUILD_NUMBER ? System.env.BUILD_NUMBER : System.env.USERNAME
@@ -41,7 +42,6 @@ jacocoTestReport {
 }
 
 repositories {
-    maven { url "http://repo.rctanalytics.com/artifactory/repo" }
     mavenLocal()
     mavenCentral()
 }
@@ -51,7 +51,7 @@ sourceSets {
         resources.excludes = ["*.jar"]
     }
     integrationTest {
-        java.srcDir file("src/integrationTest/groovy")
+        java.srcDir file("src/integrationTest/java")
         resources.srcDir file("src/integrationTest/resources")
     }
 }
@@ -66,16 +66,10 @@ test.dependsOn integrationTest
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
-
     compile "org.codehaus.groovy:groovy-all:2.4.4"
-    compile "com.zaxxer:HikariCP-java6:2.3.9"
-
-    compile files(
-            "src/main/resources/ojdbc7.jar"
-    )
+    compile "io.springfox:springfox-swagger2:2.2.2"
+    compile 'io.springfox:springfox-swagger-ui:2.2.2'
 
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
     testCompile "cglib:cglib-nodep:3.1"
@@ -89,17 +83,6 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = "2.5"
-}
-
-processResources {
-    expand([
-            appName           : appName,
-            appVendor         : "ShopperTrak RCT, INC.",
-            builtBy           : builtBy,
-            buildDate         : new Date(),
-            implementationDate: new Date(),
-            versionString     : version + "." + version2
-    ])
 }
 
 jar {
