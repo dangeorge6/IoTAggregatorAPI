@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("storeinfo/v1.0/store")
+@RequestMapping("api/v1.0/traffic")
 public class StoreInfoResource {
 	
 }

@@ -42,8 +42,8 @@ public class SwaggerConfig {
 	
     private ApiInfo buildApiInfo(String ver) {
         return new ApiInfoBuilder()
-                .title("Store Info Web Service")
-                .description("Sample Project Assignment")                
+                .title("Traffic Data Web Service")
+                .description("Interview Project Assignment")                
                 .contact("ShopperTrak RCT, INC.")
                 .version(ver)
                 .build();
