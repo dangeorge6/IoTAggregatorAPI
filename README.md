@@ -7,6 +7,7 @@ By default, the project includes:
 * Sample controller
 * Sample service
 * Spring Boot Actuator plugin
+* Swagger Plugin
 * Logging
 
 ## How to use this? ##
