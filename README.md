@@ -1,20 +1,20 @@
-## This is a **Gradle** project for **Spring Boot** based **Java** web service created at ShopperTrak. ##
+## This is a **Gradle** project for **Spring Boot** based web service ##
 
-* Build
+## **Build** ##
 `gradlew build`
 
-## Run ##
+## **Run** ##
 `gradlew bootRun`
 
-## Generate Eclipse Project ##
+## **Generate Eclipse Project** ##
 `gradlew eclipse`
 
-## Generate Idea Project ##
+## **Generate Idea Project** ##
 `gradlew idea`
 
 ## References ##
-https://spring.io/guides/gs/rest-service/
-https://spring.io/guides/gs/gradle/
-http://projects.spring.io/spring-boot/
-http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
-http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready
+# https://spring.io/guides/gs/rest-service/
+# https://spring.io/guides/gs/gradle/
+# http://projects.spring.io/spring-boot/
+# http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
+# http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready
