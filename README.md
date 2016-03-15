@@ -1,16 +1,20 @@
-## What is this? ##
+## This is a **Gradle** project for **Spring Boot** based **Java** web service created at ShopperTrak. ##
 
-This is a sample project to speed up the creation of a new **Spring Boot** based **Groovy** web service, and to add some consistency to applications created at ShopperTrak.
+* Build
+`gradlew build`
 
-By default, the project includes:
+## Run ##
+`gradlew bootRun`
 
-* Sample controller
-* Sample service
-* Spring Boot Actuator plugin
-* Logging
+## Generate Eclipse Project ##
+`gradlew eclipse`
 
-## How to use this? ##
+## Generate Idea Project ##
+`gradlew idea`
 
-1. Create your Controllers and Services (use the included samples as a starting point).
-1. Create Unit tests in `src/test/groovy/...` or `src/test/java/...`
-1. Create Integration tests in `src/integrationTest/groovy/...` or `src/integrationTest/java/...`
+## References ##
+https://spring.io/guides/gs/rest-service/
+https://spring.io/guides/gs/gradle/
+http://projects.spring.io/spring-boot/
+http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
+http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready
