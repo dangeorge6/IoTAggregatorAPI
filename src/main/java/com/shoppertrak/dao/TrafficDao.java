@@ -33,6 +33,10 @@ public class TrafficDao {
 		return data.values();
 	}
 	
+	public void delete(int id) {
+		data.remove(id);
+	}
+	
 	private void initData() {
 		addRec(100,1001,"201603010005", 6, 11);
 		addRec(100,1001,"201603010010",0,0);
@@ -68,9 +72,4 @@ public class TrafficDao {
 		r.setId(counter++).setClientId(clientId).setStoreId(storeId).setEnters(enters).setExits(exits).setMin5_dt(dt);
 		save(r);	
 	}
-
-	public void delete(int id) {
-		data.remove(id);
-	}
-
 }
