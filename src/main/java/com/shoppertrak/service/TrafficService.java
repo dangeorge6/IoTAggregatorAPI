@@ -27,7 +27,6 @@ public class TrafficService {
 	}
 
 	public Collection<TrafficRecord> getAll() {
-		// TODO Auto-generated method stub
 		return dao.getAll();
 	}
 
