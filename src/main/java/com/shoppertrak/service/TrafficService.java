@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.shoppertrak.dao.TrafficDao;
 import com.shoppertrak.domain.TrafficRecord;
+import com.shoppertrak.domain.TrafficRecordSet;
 
 @Service
 public class TrafficService {
@@ -32,5 +33,15 @@ public class TrafficService {
 
 	public void delete(int id) {
 		dao.delete(id);
+	}
+
+	public TrafficRecordSet getTrafficByClient(Long clientId, String startTime, String endTime) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public TrafficRecordSet getTrafficByClientForStore(Long clientId, Long storeId, String startTime, String endTime) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
