@@ -2,9 +2,11 @@ package com.shoppertrak.dao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
@@ -15,10 +17,63 @@ import com.shoppertrak.domain.TrafficRecord;
 public class TrafficDao {
 	
 	private Map<Integer, TrafficRecord> data = new HashMap<Integer, TrafficRecord>();
+	/*
+	I decided to put these lookups of rows by client and store because they are similar to database indexing by column
+	and provides constant time lookup for likely queries about particular clients and stores. I will perform some of the 
+	more specific data massaging further up the chain (aggregating entrance tallies, etc) and keep the in memory indexing broad. 
+	*/
+	private Map<Integer, List<TrafficRecord>> clientLookup;
+	private Map<Integer, List<TrafficRecord>> storeLookup;
+	
 	private int counter = 1;
 	
 	public TrafficDao() {
 		initData();
+		initLookups();
+	}
+	
+	private void initLookups() {
+		createClientLookup();
+		createStoreLookup();
+	}
+
+	private void createClientLookup() {
+		clientLookup = new HashMap<Integer, List<TrafficRecord>>();
+		for(Map.Entry<Integer,TrafficRecord> entry: data.entrySet()){
+			TrafficRecord value = entry.getValue();
+			if(clientLookup.containsKey(value.clientId)){
+				clientLookup.get(value.clientId).add(value);
+			} else {
+				//no rows for this client yet initialize list
+				List<TrafficRecord> l = new ArrayList<TrafficRecord>();
+				l.add(value);
+				clientLookup.put(value.clientId, l);
+			}
+		}	
+	}
+	
+	private void createStoreLookup() {
+		//could refactor this and above method
+		storeLookup = new HashMap<Integer, List<TrafficRecord>>();
+		for(Map.Entry<Integer,TrafficRecord> entry: data.entrySet()){
+			TrafficRecord value = entry.getValue();
+			if(storeLookup.containsKey(value.storeId)){
+				storeLookup.get(value.storeId).add(value);
+			} else {
+				//no rows for this client yet initialize list
+				List<TrafficRecord> l = new ArrayList<TrafficRecord>();
+				l.add(value);
+				storeLookup.put(value.storeId, l);
+			}
+		}	
+	}
+
+	public List<TrafficRecord> getByClientId(int id) {
+		return clientLookup.get(id);
+	}
+	
+	public List<TrafficRecord> getByStoreId(int id) {
+		return storeLookup.get(id);
 	}
 	
 	public TrafficRecord get(int id) {
@@ -27,6 +82,7 @@ public class TrafficDao {
 
 	public void save(TrafficRecord r) {
 		data.put(r.id, r);
+		//TODO reindex lookups
 	}
 	
 	public Collection<TrafficRecord> getAll() {
@@ -35,6 +91,7 @@ public class TrafficDao {
 	
 	public void delete(int id) {
 		data.remove(id);
+		//TODO reindex lookups
 	}
 	
 	private void initData() {

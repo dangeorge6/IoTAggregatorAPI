@@ -81,7 +81,7 @@ public class TrafficResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
   
     public ResponseEntity getClientTraffic(
-    		@ApiParam(value = "Client Id", required = true) @PathVariable("clientId") Long clientId, 
+    		@ApiParam(value = "Client Id", required = true) @PathVariable("clientId") int clientId, 
     		@ApiParam(value = "Start Time", required = true) @PathVariable("startTime") String startTime, 
     		@ApiParam(value = "End Time", required = true) @PathVariable("endTime") String endTime ) {
 		
@@ -118,8 +118,8 @@ public class TrafficResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     
     public ResponseEntity getClientTrafficByStore(
-    		@ApiParam(value = "Client Id", required = true) @PathVariable("clientId") Long clientId, 
-    		@ApiParam(value = "Store Id", required = true) @PathVariable("storeId") Long storeId, 
+    		@ApiParam(value = "Client Id", required = true) @PathVariable("clientId") int clientId, 
+    		@ApiParam(value = "Store Id", required = true) @PathVariable("storeId") int storeId, 
     		@ApiParam(value = "Start Time", required = true) @PathVariable("startTime") String startTime, 
     		@ApiParam(value = "End Time", required = true) @PathVariable("endTime") String endTime ){
 	        

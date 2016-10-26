@@ -1,6 +1,7 @@
 package com.shoppertrak.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,12 +36,27 @@ public class TrafficService {
 		dao.delete(id);
 	}
 
-	public TrafficRecordSet getTrafficByClient(Long clientId, String startTime, String endTime) {
-		// TODO Auto-generated method stub
-		return null;
+	public TrafficRecordSet getTrafficByClient(int clientId, String startTime, String endTime) {
+		String errorMsg = null;
+		Collection<TrafficRecord> returnList = null;
+		Collection<TrafficRecord> clientRecords = dao.getByClientId(Math.toIntExact(clientId));
+		if(clientRecords.isEmpty()){
+			errorMsg = "Client Doesn't Exist!";
+		} else {
+			//client records are already ordered by startdate in DAO.
+			//I thought about narrowing the client records between start and end date first, then aggregating, 
+			//but I think I'd rather do it all in a single pass through the list to improve runtime.
+			returnList = get15MinAggregatesBetweenDates(clientRecords, startTime, endTime);
+		}
+		return new TrafficRecordSet(clientId, null, returnList, errorMsg.toString());
 	}
 
-	public TrafficRecordSet getTrafficByClientForStore(Long clientId, Long storeId, String startTime, String endTime) {
+	private Collection<TrafficRecord> get15MinAggregatesBetweenDates(Collection<TrafficRecord> records, String startTime, String endTime) {
+		// TODO Auto-generated method stub
+		return records;
+	}
+
+	public TrafficRecordSet getTrafficByClientForStore(int clientId, int storeId, String startTime, String endTime) {
 		// TODO Auto-generated method stub
 		return null;
 	}
