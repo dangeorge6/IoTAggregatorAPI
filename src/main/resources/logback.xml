@@ -7,6 +7,8 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
         </encoder>
     </appender>
+    
+<!-- Not worrying about logging to file. This will cause errors on systems without this path. Don't want to cause build headaches for purposes of exercise.
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/opt/application/logs/app.log</file>
@@ -22,12 +24,12 @@
             <MaxFileSize>250MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
-
+-->
     <logger name="com.shoppertrak" level="TRACE"/>
 
     <!-- By default, the level of the root level is set to INFO -->
     <root level="INFO">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
+       <!--<appender-ref ref="FILE" />-->
     </root>
 </configuration>
