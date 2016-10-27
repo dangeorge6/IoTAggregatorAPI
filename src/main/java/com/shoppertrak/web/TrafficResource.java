@@ -93,7 +93,7 @@ public class TrafficResource {
 	        	return new ResponseEntity<>(dr.getErrorMsg(),HttpStatus.BAD_REQUEST);
 	        }
 	        
-	        TrafficRecordSet clientTraffic = service.getTrafficByClient(clientId,startTime,endTime);
+	        TrafficRecordSet clientTraffic = service.getTrafficByClient(clientId,dr);
 	        
 	        if(clientTraffic.hasError()){
 	        	//return a 404 when client doesn't exist
@@ -133,7 +133,7 @@ public class TrafficResource {
 	        	return new ResponseEntity<>(dr.getErrorMsg(),HttpStatus.BAD_REQUEST);
 	        }
 	        
-	        TrafficRecordSet clientTraffic = service.getTrafficByClientForStore(clientId,storeId,startTime,endTime);
+	        TrafficRecordSet clientTraffic = service.getTrafficByClientForStore(clientId,storeId,dr);
 	        
 	        if(clientTraffic.hasError()){
 	        	//return a 404 when client doesn't exist or store doesn't exist

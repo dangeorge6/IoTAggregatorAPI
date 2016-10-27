@@ -2,6 +2,7 @@ package com.shoppertrak.domain;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateRange {
@@ -64,5 +65,6 @@ public class DateRange {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
+	
 	
 }

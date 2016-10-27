@@ -10,6 +10,12 @@ public class TrafficRecordAggregate {
 	private int enters;
 	private int exits;
 	
+	public TrafficRecordAggregate(Date interval, int enters, int exits){
+		this.interval = interval;
+		this.enters = enters;
+		this.exits = exits;
+	}
+	
 	public int getEnters() {
 		return enters;
 	}

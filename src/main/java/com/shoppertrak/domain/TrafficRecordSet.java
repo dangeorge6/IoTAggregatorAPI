@@ -11,11 +11,11 @@ public class TrafficRecordSet {
 
 	private Integer clientId;
 	private Integer storeId;
-	private Collection<TrafficRecord> traffic;
+	private Collection<TrafficRecordAggregate> traffic;
 	private String errorMsg;
 	private boolean hasError;
 	
-	public TrafficRecordSet(Integer clientId, Integer storeId, Collection<TrafficRecord> recordSet, String errorMsg){
+	public TrafficRecordSet(Integer clientId, Integer storeId, Collection<TrafficRecordAggregate> recordSet, String errorMsg){
 		
 		this.clientId = clientId;
 		this.storeId = storeId;
@@ -28,10 +28,10 @@ public class TrafficRecordSet {
       
 	}
 	 
-	public Collection<TrafficRecord> getTraffic() {
+	public Collection<TrafficRecordAggregate> getTraffic() {
 		return traffic;
 	}
-	public void setTraffic(Collection<TrafficRecord> recordSet) {
+	public void setTraffic(Collection<TrafficRecordAggregate> recordSet) {
 		this.traffic = recordSet;
 	}
 	
