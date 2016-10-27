@@ -12,7 +12,7 @@ public class DateRange {
 	private boolean hasError;
 	
 	public DateRange(String start, String end){
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
         dateFormat.setLenient(false);
         StringBuilder error = new StringBuilder();
         try{

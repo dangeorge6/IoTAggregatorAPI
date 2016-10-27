@@ -39,8 +39,8 @@ public class TrafficService {
 	public TrafficRecordSet getTrafficByClient(int clientId, String startTime, String endTime) {
 		String errorMsg = null;
 		Collection<TrafficRecord> returnList = null;
-		Collection<TrafficRecord> clientRecords = dao.getByClientId(Math.toIntExact(clientId));
-		if(clientRecords.isEmpty()){
+		Collection<TrafficRecord> clientRecords = dao.getByClientId(clientId);
+		if(clientRecords == null || clientRecords.isEmpty()){
 			errorMsg = "Client Doesn't Exist!";
 		} else {
 			//client records are already ordered by startdate in DAO.
@@ -48,7 +48,7 @@ public class TrafficService {
 			//but I think I'd rather do it all in a single pass through the list to improve runtime.
 			returnList = get15MinAggregatesBetweenDates(clientRecords, startTime, endTime);
 		}
-		return new TrafficRecordSet(clientId, null, returnList, errorMsg.toString());
+		return new TrafficRecordSet(clientId, null, returnList, errorMsg);
 	}
 
 	private Collection<TrafficRecord> get15MinAggregatesBetweenDates(Collection<TrafficRecord> records, String startTime, String endTime) {
@@ -57,7 +57,20 @@ public class TrafficService {
 	}
 
 	public TrafficRecordSet getTrafficByClientForStore(int clientId, int storeId, String startTime, String endTime) {
-		// TODO Auto-generated method stub
-		return null;
+		String errorMsg = null;
+		Collection<TrafficRecord> returnList = null;
+		Collection<TrafficRecord> clientRecords = dao.getByClientId(clientId);
+		if(clientRecords == null || clientRecords.isEmpty()){
+			errorMsg = "Client Doesn't Exist!";
+		} else {
+			Collection<TrafficRecord> storeRecords = dao.getByStoreId(storeId);
+			if(storeRecords == null || storeRecords.isEmpty()){
+				errorMsg = "Store Doesn't Exist!";
+			} else {
+				//store and client exists
+				returnList = get15MinAggregatesBetweenDates(clientRecords, startTime, endTime);
+			}			
+		}
+		return new TrafficRecordSet(clientId, null, returnList, errorMsg);
 	}
 }

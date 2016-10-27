@@ -3,7 +3,10 @@ package com.shoppertrak.dao;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,10 +53,16 @@ public class TrafficDao {
 				clientLookup.put(value.clientId, l);
 			}
 		}	
+		
+		//data HashMap is not guaranteed to be ordered by key, so the Traffic Record Lists are not necessarily ordered by startDate.
+		//my aggregations algorithm depends on ordering so I'll order here.
+		orderMapListsByStartDate(clientLookup);
+		
 	}
 	
+
 	private void createStoreLookup() {
-		//could refactor this and above method
+		//will refactor this and above method if I have time using reflection
 		storeLookup = new HashMap<Integer, List<TrafficRecord>>();
 		for(Map.Entry<Integer,TrafficRecord> entry: data.entrySet()){
 			TrafficRecord value = entry.getValue();
@@ -65,7 +74,129 @@ public class TrafficDao {
 				l.add(value);
 				storeLookup.put(value.storeId, l);
 			}
-		}	
+		}
+		
+		orderMapListsByStartDate(storeLookup);
+	}
+	
+	private void saveToClientLookup(TrafficRecord r) {
+		//need to keep lookups updated when records are added and updated
+		//refactor with below if you have time
+			List<TrafficRecord> l;
+			boolean isAdd = true;
+			if(clientLookup.containsKey(r.clientId)){
+				l = clientLookup.get(r.clientId);
+				
+				for (int i = 0; i < l.size(); i++){
+					if(l.get(i).id == r.id){
+						//this is an update, replace element
+						l.set(i,r);
+						isAdd = false;
+						break;
+					}
+				}
+				//this is an add, add it to list
+				if(isAdd) l.add(r);
+				
+			} else {
+				//no rows for this client yet initialize list
+				l = new ArrayList<TrafficRecord>();
+				l.add(r);
+				clientLookup.put(r.clientId, l);
+			}
+			//keep the list in order
+			Collections.sort(l, new Comparator<TrafficRecord>(){
+				@Override
+				public int compare(TrafficRecord a, TrafficRecord b){
+					return a.min5_dt.compareTo(b.min5_dt);
+				}
+			});
+	}
+		
+	private void saveToStoreLookup(TrafficRecord r) {
+		List<TrafficRecord> l;
+		boolean isAdd = true;
+		if(storeLookup.containsKey(r.storeId)){
+			l = storeLookup.get(r.storeId);
+			
+			for (int i = 0; i < l.size(); i++){
+				if(l.get(i).id == r.id){
+					//this is an update, replace element
+					l.set(i,r);
+					isAdd = false;
+					break;
+				}
+			}
+			//this is an add, add it to list
+			if(isAdd) l.add(r);
+			
+		} else {
+			//no rows for this client yet initialize list
+			l = new ArrayList<TrafficRecord>();
+			l.add(r);
+			storeLookup.put(r.storeId, l);
+		}
+		//keep the list in order
+		Collections.sort(l, new Comparator<TrafficRecord>(){
+			@Override
+			public int compare(TrafficRecord a, TrafficRecord b){
+				return a.min5_dt.compareTo(b.min5_dt);
+			}
+		});
+		
+	}
+	
+	private void deleteFromStoreLookup(int id, int storeId) {
+		List<TrafficRecord> l = storeLookup.get(storeId);
+		if(l != null){
+			for (int i = 0; i < l.size(); i++){
+				if(l.get(i).id == id){
+					//this is an update, replace element
+					l.remove(i);
+					break;
+				}
+			}
+			//keep the list in order
+			Collections.sort(l, new Comparator<TrafficRecord>(){
+				@Override
+				public int compare(TrafficRecord a, TrafficRecord b){
+					return a.min5_dt.compareTo(b.min5_dt);
+				}
+			});			
+		}
+	}
+
+	private void deleteFromClientLookup(int id, int clientId) {
+		// TODO Auto-generated method stub
+		List<TrafficRecord> l = clientLookup.get(clientId);
+		if(l != null){
+			for (int i = 0; i < l.size(); i++){
+				if(l.get(i).id == id){
+					//this is an update, replace element
+					l.remove(i);
+					break;
+				}
+			}
+			//keep the list in order
+			Collections.sort(l, new Comparator<TrafficRecord>(){
+				@Override
+				public int compare(TrafficRecord a, TrafficRecord b){
+					return a.min5_dt.compareTo(b.min5_dt);
+				}
+			});			
+		}
+	}
+	
+	private void orderMapListsByStartDate(Map<Integer, List<TrafficRecord>> mapToOrder) {
+		for(Map.Entry<Integer,List<TrafficRecord>> entry: mapToOrder.entrySet()){
+			List<TrafficRecord> value = entry.getValue();
+			Collections.sort(value, new Comparator<TrafficRecord>(){
+					@Override
+					public int compare(TrafficRecord a, TrafficRecord b){
+						return a.min5_dt.compareTo(b.min5_dt);
+					}
+			});
+		}
 	}
 
 	public List<TrafficRecord> getByClientId(int id) {
@@ -82,18 +213,29 @@ public class TrafficDao {
 
 	public void save(TrafficRecord r) {
 		data.put(r.id, r);
-		//TODO reindex lookups
+		//need to keep the indexes updated as new data comes in
+		saveToClientLookup(r);
+		saveToStoreLookup(r);
 	}
 	
+	
+
 	public Collection<TrafficRecord> getAll() {
 		return data.values();
 	}
 	
 	public void delete(int id) {
+		TrafficRecord tr = data.get(id);
+		int clientId = tr.clientId;
+		int storeId = tr.storeId;
 		data.remove(id);
-		//TODO reindex lookups
+		//keep the indexes up to date as items are deleted
+		deleteFromClientLookup(id, clientId);
+		deleteFromStoreLookup(id, storeId);
 	}
 	
+	
+
 	private void initData() {
 		addRec(100,1001,"201603010005", 6, 11);
 		addRec(100,1001,"201603010010",0,0);

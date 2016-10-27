@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class TrafficRecordSet {
 
-	private int clientId;
-	private int storeId;
-	private Collection<TrafficRecord> recordSet;
+	private Integer clientId;
+	private Integer storeId;
+	private Collection<TrafficRecord> traffic;
 	private String errorMsg;
 	private boolean hasError;
 	
@@ -19,23 +19,20 @@ public class TrafficRecordSet {
 		
 		this.clientId = clientId;
 		this.storeId = storeId;
-        this.recordSet = recordSet;
+        this.traffic = recordSet;
         this.errorMsg = errorMsg;
         this.hasError = false;
-        if(errorMsg.length() != 0){
+        if(errorMsg != null && errorMsg.length() != 0){
         	this.hasError = true;
         }
       
 	}
-	
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    
-	public Collection<TrafficRecord> getRecordSet() {
-		return recordSet;
+	 
+	public Collection<TrafficRecord> getTraffic() {
+		return traffic;
 	}
-	public void setRecordSet(Collection<TrafficRecord> recordSet) {
-		this.recordSet = recordSet;
+	public void setTraffic(Collection<TrafficRecord> recordSet) {
+		this.traffic = recordSet;
 	}
 	
     @JsonIgnore
@@ -55,7 +52,7 @@ public class TrafficRecordSet {
 	}
 
 
-	public int getClientId() {
+	public Integer getClientId() {
 		return clientId;
 	}
 
@@ -66,7 +63,7 @@ public class TrafficRecordSet {
 
 	//only include this if it's not null (will appear when querying for specific store
     @JsonInclude(JsonInclude.Include.NON_NULL) 
-	public int getStoreId() {
+	public Integer getStoreId() {
 		return storeId;
 	}
 
