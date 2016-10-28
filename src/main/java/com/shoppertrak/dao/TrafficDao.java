@@ -59,10 +59,8 @@ public class TrafficDao {
 		orderMapListsByStartDate(clientLookup);
 		
 	}
-	
 
 	private void createStoreLookup() {
-		//will refactor this and above method if I have time using reflection
 		storeLookup = new HashMap<Integer, List<TrafficRecord>>();
 		for(Map.Entry<Integer,TrafficRecord> entry: data.entrySet()){
 			TrafficRecord value = entry.getValue();
@@ -81,7 +79,6 @@ public class TrafficDao {
 	
 	private void saveToClientLookup(TrafficRecord r) {
 		//need to keep lookups updated when records are added and updated
-		//refactor with below if you have time
 		if(clientLookup != null){
 			//only perform when clientLookup is initialized (not when data is first loaded. 
 			//This function is only for one-off adds/updates. Don't want to sort after every insert on the initial data load.
@@ -107,13 +104,11 @@ public class TrafficDao {
 				l.add(r);
 				clientLookup.put(r.clientId, l);
 			}
+			
 			//keep the list in order
-			Collections.sort(l, new Comparator<TrafficRecord>(){
-				@Override
-				public int compare(TrafficRecord a, TrafficRecord b){
-					return a.min5_dt.compareTo(b.min5_dt);
-				}
-			});
+			orderListByStartDate(l);
+			
+			
 		}
 	}
 		
@@ -142,12 +137,7 @@ public class TrafficDao {
 				storeLookup.put(r.storeId, l);
 			}
 			//keep the list in order
-			Collections.sort(l, new Comparator<TrafficRecord>(){
-				@Override
-				public int compare(TrafficRecord a, TrafficRecord b){
-					return a.min5_dt.compareTo(b.min5_dt);
-				}
-			});
+			orderListByStartDate(l);
 		}
 		
 	}
@@ -163,12 +153,7 @@ public class TrafficDao {
 				}
 			}
 			//keep the list in order
-			Collections.sort(l, new Comparator<TrafficRecord>(){
-				@Override
-				public int compare(TrafficRecord a, TrafficRecord b){
-					return a.min5_dt.compareTo(b.min5_dt);
-				}
-			});			
+			orderListByStartDate(l);		
 		}
 	}
 
@@ -184,25 +169,26 @@ public class TrafficDao {
 				}
 			}
 			//keep the list in order
-			Collections.sort(l, new Comparator<TrafficRecord>(){
-				@Override
-				public int compare(TrafficRecord a, TrafficRecord b){
-					return a.min5_dt.compareTo(b.min5_dt);
-				}
-			});			
+			orderListByStartDate(l);		
 		}
 	}
+	
 	
 	private void orderMapListsByStartDate(Map<Integer, List<TrafficRecord>> mapToOrder) {
 		for(Map.Entry<Integer,List<TrafficRecord>> entry: mapToOrder.entrySet()){
 			List<TrafficRecord> value = entry.getValue();
-			Collections.sort(value, new Comparator<TrafficRecord>(){
-					@Override
-					public int compare(TrafficRecord a, TrafficRecord b){
-						return a.min5_dt.compareTo(b.min5_dt);
-					}
-			});
+			orderListByStartDate(value);
 		}
+	}
+	
+	private void orderListByStartDate(List<TrafficRecord> l) {
+		//comparator to sort by start date
+		Collections.sort(l, new Comparator<TrafficRecord>(){
+			@Override
+			public int compare(TrafficRecord a, TrafficRecord b){
+				return a.min5_dt.compareTo(b.min5_dt);
+			}
+		});	
 	}
 
 	public List<TrafficRecord> getByClientId(int id) {
