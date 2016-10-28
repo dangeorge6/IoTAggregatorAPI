@@ -31,6 +31,7 @@ public class IntegrationTest {
 	private static final String ID = "{id}";
 	private static final String startDate = "201603010000";
 	private static final String endDate = "201603010030";
+	private static final String endDateConstricted = "201603010015";
 	private static final String badDate = "202341603010030";
 	private static final Date expectedFirstIntervalDate = TestHelper.parseDate("201603010015");
 	private static final Date expectedSecondIntervalDate = TestHelper.parseDate("201603010030");
@@ -85,6 +86,8 @@ public class IntegrationTest {
 		        	.statusCode(200)
 		         .extract().body().as(TrafficRecordSet.class);
 			    
+				assertTrue(ret.getTraffic().size() < 3);
+				
 			    TrafficRecordAggregate firstInterval = ret.getTraffic().get(0);
 			    TrafficRecordAggregate secondInterval = ret.getTraffic().get(1);
 			    
@@ -97,6 +100,26 @@ public class IntegrationTest {
 			    assertEquals(secondInterval.getExits(),18);
 	}
 	
+	@Test
+	public void getClientTrafficWillReturnCorrectIncrementValuesConstrictedDateRange() {	
+		populateData();
+		String pathToTest = String.format("/client/300/startTime/%s/endTime/%s",startDate,endDateConstricted);
+		TrafficRecordSet ret =  
+				when()
+			        .get(pathToTest)
+		         .then()
+		        	.statusCode(200)
+		         .extract().body().as(TrafficRecordSet.class);
+			    
+				assertTrue(ret.getTraffic().size() < 2);
+				
+			    TrafficRecordAggregate firstInterval = ret.getTraffic().get(0);
+			    
+			    assertEquals((int) ret.getClientId(),300);
+			    assertEquals(firstInterval.getInterval(),expectedFirstIntervalDate);
+			    assertEquals(firstInterval.getEnters(),12);
+			    assertEquals(firstInterval.getExits(),16);
+	}
 	
 	@Test
 	public void getClientTrafficWillReturnZeroIncrementValuesForNonExistantClient() {	
@@ -109,6 +132,8 @@ public class IntegrationTest {
 		        	.statusCode(200)
 		         .extract().body().as(TrafficRecordSet.class);
 			    
+				assertTrue(ret.getTraffic().size() < 3);
+				
 			    TrafficRecordAggregate firstInterval = ret.getTraffic().get(0);
 			    TrafficRecordAggregate secondInterval = ret.getTraffic().get(1);
 			    
@@ -151,11 +176,11 @@ public class IntegrationTest {
 		        	.statusCode(200)
 		         .extract().body().as(TrafficRecordSet.class);
 			    
+				assertTrue(ret.getTraffic().size() < 3);
+				
 			    TrafficRecordAggregate firstInterval = ret.getTraffic().get(0);
 			    TrafficRecordAggregate secondInterval = ret.getTraffic().get(1);
 			    
-			    System.out.println(firstInterval);
-			    System.out.println(secondInterval);
 			    assertEquals((int) ret.getClientId(),300);
 			    assertEquals((int) ret.getStoreId(),3000);
 			    assertEquals(firstInterval.getInterval(),expectedFirstIntervalDate);
@@ -164,6 +189,29 @@ public class IntegrationTest {
 			    assertEquals(secondInterval.getInterval(),expectedSecondIntervalDate);
 			    assertEquals(secondInterval.getEnters(),17);
 			    assertEquals(secondInterval.getExits(),9);
+	}
+	
+	@Test
+	public void getClientTrafficByStoreWillReturnCorrectIncrementValuesConstrictedDateRange() {	
+		populateData();
+		String pathToTest = String.format("/client/300/store/3000/startTime/%s/endTime/%s",startDate,endDateConstricted);
+		
+		TrafficRecordSet ret =  
+				when()
+			        .get(pathToTest)
+		         .then()
+		        	.statusCode(200)
+		         .extract().body().as(TrafficRecordSet.class);
+			    
+				assertTrue(ret.getTraffic().size() < 2);
+				
+			    TrafficRecordAggregate firstInterval = ret.getTraffic().get(0);
+
+			    assertEquals((int) ret.getClientId(),300);
+			    assertEquals((int) ret.getStoreId(),3000);
+			    assertEquals(firstInterval.getInterval(),expectedFirstIntervalDate);
+			    assertEquals(firstInterval.getEnters(),8);
+			    assertEquals(firstInterval.getExits(),12);
 	}
 	
 	@Test
@@ -177,7 +225,9 @@ public class IntegrationTest {
 		         .then()
 		        	.statusCode(200)
 		         .extract().body().as(TrafficRecordSet.class);
-			    
+			   
+				assertTrue(ret.getTraffic().size() < 3);
+		
 			    TrafficRecordAggregate firstInterval = ret.getTraffic().get(0);
 			    TrafficRecordAggregate secondInterval = ret.getTraffic().get(1);
 			    

@@ -92,7 +92,7 @@ public class TrafficResource {
 	        
 	        TrafficRecordSet clientTraffic = service.getTrafficByClient(clientId,dr);
 	        
-	        //I'm a fan of throwing a 400 and explicitly telling consumer when client or store doesn't exist.
+	        //I'm a fan of throwing a 400 and explicitly telling the consumer when client or store doesn't exist.
 	        //But I'm commenting out the below to conform with the specs
 	        
 //	        if(clientTraffic.hasError()){

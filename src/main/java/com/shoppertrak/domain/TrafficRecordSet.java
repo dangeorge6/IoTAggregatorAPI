@@ -1,6 +1,5 @@
 package com.shoppertrak.domain;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
