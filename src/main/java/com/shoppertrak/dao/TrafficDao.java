@@ -106,9 +106,7 @@ public class TrafficDao {
 			}
 			
 			//keep the list in order
-			orderListByStartDate(l);
-			
-			
+			orderListByStartDate(l);	
 		}
 	}
 		
@@ -139,7 +137,6 @@ public class TrafficDao {
 			//keep the list in order
 			orderListByStartDate(l);
 		}
-		
 	}
 	
 	private void deleteFromStoreLookup(int id, int storeId) {
@@ -171,8 +168,7 @@ public class TrafficDao {
 			//keep the list in order
 			orderListByStartDate(l);		
 		}
-	}
-	
+	}	
 	
 	private void orderMapListsByStartDate(Map<Integer, List<TrafficRecord>> mapToOrder) {
 		for(Map.Entry<Integer,List<TrafficRecord>> entry: mapToOrder.entrySet()){
@@ -209,9 +205,7 @@ public class TrafficDao {
 		saveToClientLookup(r);
 		saveToStoreLookup(r);
 	}
-	
-	
-
+		
 	public Collection<TrafficRecord> getAll() {
 		return data.values();
 	}
@@ -225,8 +219,6 @@ public class TrafficDao {
 		deleteFromClientLookup(id, clientId);
 		deleteFromStoreLookup(id, storeId);
 	}
-	
-	
 
 	private void initData() {
 		addRec(100,1001,"201603010005", 6, 11);

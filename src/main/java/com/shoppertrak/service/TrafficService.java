@@ -121,9 +121,6 @@ public class TrafficService {
 	}
 
 	private int getIndexForFirstRecordBeforeDate(List<TrafficRecord> records, Date startDate) {
-		//TODO: Change to binary search
-		
-		
 		
 		int recordPointer = 0;
 		while(records != null 
