@@ -34,5 +34,12 @@ public class TrafficRecord {
 		this.exits = exits;
 		return this;
 	}
+	
+	@Override
+	public String toString() {
+		return "TrafficRecord [id=" + id + ", clientId=" + clientId + ", storeId=" + storeId + ", min5_dt=" + min5_dt
+				+ ", enters=" + enters + ", exits=" + exits + "]";
+	}
+	
 
 }

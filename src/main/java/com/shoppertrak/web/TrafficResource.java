@@ -85,8 +85,6 @@ public class TrafficResource {
     		@ApiParam(value = "Start Time", required = true) @PathVariable("startTime") String startTime, 
     		@ApiParam(value = "End Time", required = true) @PathVariable("endTime") String endTime ) {
 		
-			logger.info("in getClientTraffic");
-			logger.info("start time is " + startTime);
 	        //use custom DateRange class to determine if the dates are valid and chronological
 	        DateRange dr = new DateRange(startTime,endTime);
 	        if(dr.hasError()){
@@ -95,11 +93,14 @@ public class TrafficResource {
 	        
 	        TrafficRecordSet clientTraffic = service.getTrafficByClient(clientId,dr);
 	        
-	        if(clientTraffic.hasError()){
-	        	//return a 404 when client doesn't exist
-	        	//I think it's a bit more robust than just returning intervals with no data
-	        	return new ResponseEntity<>(clientTraffic.getErrorMsg(),HttpStatus.BAD_REQUEST);
-	        }
+	        //I'm a fan of throwing a 400 and explicitly telling consumer when client or store doesn't exist.
+	        //But I'm commenting out the below to conform with the specs
+	        
+//	        if(clientTraffic.hasError()){
+//	        	//return a 400 when client doesn't exist
+//	        	//I think it's a bit more robust than just returning intervals with no data
+//	        	return new ResponseEntity<>(clientTraffic.getErrorMsg(),HttpStatus.BAD_REQUEST);
+//	        }
 	        
 	        return Optional.ofNullable(clientTraffic)
 	                .map(result -> new ResponseEntity<>(
@@ -126,7 +127,6 @@ public class TrafficResource {
     		@ApiParam(value = "Start Time", required = true) @PathVariable("startTime") String startTime, 
     		@ApiParam(value = "End Time", required = true) @PathVariable("endTime") String endTime ){
 	        
-			logger.info("in getClientTrafficByStore");
 	        //use custom DateRange class to determine if the dates are valid and chronological
 	        DateRange dr = new DateRange(startTime,endTime);
 	        if(dr.hasError()){
@@ -135,11 +135,11 @@ public class TrafficResource {
 	        
 	        TrafficRecordSet clientTraffic = service.getTrafficByClientForStore(clientId,storeId,dr);
 	        
-	        if(clientTraffic.hasError()){
-	        	//return a 404 when client doesn't exist or store doesn't exist
-	        	//I think it's a bit more robust than just returning intervals with no data
-	        	return new ResponseEntity<>(clientTraffic.getErrorMsg(),HttpStatus.BAD_REQUEST);
-	        }
+//	        if(clientTraffic.hasError()){
+//	        	//return a 400 when client doesn't exist or store doesn't exist
+//	        	//I think it's a bit more robust than just returning intervals with no data
+//	        	return new ResponseEntity<>(clientTraffic.getErrorMsg(),HttpStatus.BAD_REQUEST);
+//	        }
 	        
 	        return Optional.ofNullable(clientTraffic)
 	                .map(result -> new ResponseEntity<>(

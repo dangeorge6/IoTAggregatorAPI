@@ -22,8 +22,9 @@ public class TrafficDao {
 	private Map<Integer, TrafficRecord> data = new HashMap<Integer, TrafficRecord>();
 	/*
 	I decided to put these lookups of rows by client and store because they are similar to database indexing by column
-	and provides constant time lookup for likely queries about particular clients and stores. I will perform some of the 
-	more specific data massaging further up the chain (aggregating entrance tallies, etc) and keep the in memory indexing broad. 
+	and provide constant time lookup for common queries about particular clients and stores. I will perform some of the 
+	more specific data massaging/aggregating further up the chain (aggregating entrance tallies, etc) and keep it broad while working in this DAO.
+	These lookup hashes are kept current even when new TrafficRecords are added or deleted. 
 	*/
 	private Map<Integer, List<TrafficRecord>> clientLookup;
 	private Map<Integer, List<TrafficRecord>> storeLookup;
@@ -82,6 +83,9 @@ public class TrafficDao {
 	private void saveToClientLookup(TrafficRecord r) {
 		//need to keep lookups updated when records are added and updated
 		//refactor with below if you have time
+		if(clientLookup != null){
+			//only perform when clientLookup is initialized (not when data is first loaded. 
+			//This function is only for one-off adds/updates. Don't want to sort after every insert on the initial data load.
 			List<TrafficRecord> l;
 			boolean isAdd = true;
 			if(clientLookup.containsKey(r.clientId)){
@@ -111,38 +115,41 @@ public class TrafficDao {
 					return a.min5_dt.compareTo(b.min5_dt);
 				}
 			});
+		}
 	}
 		
 	private void saveToStoreLookup(TrafficRecord r) {
 		List<TrafficRecord> l;
 		boolean isAdd = true;
-		if(storeLookup.containsKey(r.storeId)){
-			l = storeLookup.get(r.storeId);
-			
-			for (int i = 0; i < l.size(); i++){
-				if(l.get(i).id == r.id){
-					//this is an update, replace element
-					l.set(i,r);
-					isAdd = false;
-					break;
+		if(storeLookup != null){
+			if(storeLookup.containsKey(r.storeId)){
+				l = storeLookup.get(r.storeId);
+				
+				for (int i = 0; i < l.size(); i++){
+					if(l.get(i).id == r.id){
+						//this is an update, replace element
+						l.set(i,r);
+						isAdd = false;
+						break;
+					}
 				}
+				//this is an add, add it to list
+				if(isAdd) l.add(r);
+				
+			} else {
+				//no rows for this client yet initialize list
+				l = new ArrayList<TrafficRecord>();
+				l.add(r);
+				storeLookup.put(r.storeId, l);
 			}
-			//this is an add, add it to list
-			if(isAdd) l.add(r);
-			
-		} else {
-			//no rows for this client yet initialize list
-			l = new ArrayList<TrafficRecord>();
-			l.add(r);
-			storeLookup.put(r.storeId, l);
+			//keep the list in order
+			Collections.sort(l, new Comparator<TrafficRecord>(){
+				@Override
+				public int compare(TrafficRecord a, TrafficRecord b){
+					return a.min5_dt.compareTo(b.min5_dt);
+				}
+			});
 		}
-		//keep the list in order
-		Collections.sort(l, new Comparator<TrafficRecord>(){
-			@Override
-			public int compare(TrafficRecord a, TrafficRecord b){
-				return a.min5_dt.compareTo(b.min5_dt);
-			}
-		});
 		
 	}
 	
