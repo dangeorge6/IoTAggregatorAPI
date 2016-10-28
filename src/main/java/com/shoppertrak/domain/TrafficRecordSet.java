@@ -1,8 +1,7 @@
 package com.shoppertrak.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,11 +10,11 @@ public class TrafficRecordSet {
 
 	private Integer clientId;
 	private Integer storeId;
-	private Collection<TrafficRecordAggregate> traffic;
+	private List<TrafficRecordAggregate> traffic;
 	private String errorMsg;
 	private boolean hasError;
 	
-	public TrafficRecordSet(Integer clientId, Integer storeId, Collection<TrafficRecordAggregate> recordSet, String errorMsg){
+	public TrafficRecordSet(Integer clientId, Integer storeId, List<TrafficRecordAggregate> recordSet, String errorMsg){
 		
 		this.clientId = clientId;
 		this.storeId = storeId;
@@ -27,11 +26,15 @@ public class TrafficRecordSet {
         }
       
 	}
+	
+	public TrafficRecordSet(){
+		
+	}
 	 
-	public Collection<TrafficRecordAggregate> getTraffic() {
+	public List<TrafficRecordAggregate> getTraffic() {
 		return traffic;
 	}
-	public void setTraffic(Collection<TrafficRecordAggregate> recordSet) {
+	public void setTraffic(List<TrafficRecordAggregate> recordSet) {
 		this.traffic = recordSet;
 	}
 	
@@ -70,6 +73,12 @@ public class TrafficRecordSet {
 
 	public void setStoreId(int storeId) {
 		this.storeId = storeId;
+	}
+
+	@Override
+	public String toString() {
+		return "TrafficRecordSet [clientId=" + clientId + ", storeId=" + storeId + ", traffic=" + traffic
+				+ ", errorMsg=" + errorMsg + ", hasError=" + hasError + "]";
 	}
 	
 

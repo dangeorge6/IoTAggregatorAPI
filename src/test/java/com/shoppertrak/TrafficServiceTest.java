@@ -1,6 +1,7 @@
 package com.shoppertrak;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +17,7 @@ import com.shoppertrak.service.TrafficService;
 
 import static org.junit.Assert.assertTrue;
 
+//Ideally I'd like to mock out the TrafficDAO, but running low on time
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Main.class)
@@ -35,6 +37,35 @@ public class TrafficServiceTest {
 	public void getAllTest() {	
 		Collection<TrafficRecord> ret = target.getAll();
 		assertTrue(ret.size()>0);
+	}
+	
+	@Test
+	public void getTrafficByClientReturnsValidIntervals() {	
+		populateData();
+	}
+	
+	@Test
+	public void getTrafficByClientReturnsZeroIntervalsForNonExistantClient() {	
+		populateData();
+	}
+	
+	@Test
+	public void getTrafficByClientForStoreReturnsValidIntervals() {	
+		populateData();
+	}
+	
+	@Test
+	public void getTrafficByClientForStoreReturnsZeroIntervalsForNonExistantClient() {	
+		populateData();
+	}
+	
+	private void populateData() {
+		//adding independent data for use in tests. Don't want to make assumption sample data will always be present
+		List<TrafficRecord> l = TestHelper.getSampleData();
+		for(TrafficRecord tr: l){
+			target.save(tr);
+		}
+		       
 	}
 	
 }

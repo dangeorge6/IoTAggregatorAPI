@@ -16,6 +16,9 @@ public class TrafficRecordAggregate {
 		this.exits = exits;
 	}
 	
+	public TrafficRecordAggregate(){
+	}
+	
 	public int getEnters() {
 		return enters;
 	}
@@ -33,6 +36,11 @@ public class TrafficRecordAggregate {
 	}
 	public void setExits(int exits) {
 		this.exits = exits;
+	}
+
+	@Override
+	public String toString() {
+		return "TrafficRecordAggregate [interval=" + interval + ", enters=" + enters + ", exits=" + exits + "]";
 	}
 	
 }

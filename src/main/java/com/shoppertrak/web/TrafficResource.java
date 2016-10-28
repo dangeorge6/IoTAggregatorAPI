@@ -1,7 +1,6 @@
 package com.shoppertrak.web;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import io.swagger.annotations.ApiOperation;

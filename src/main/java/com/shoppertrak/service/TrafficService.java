@@ -45,7 +45,7 @@ public class TrafficService {
 
 	public TrafficRecordSet getTrafficByClient(int clientId, DateRange dr) {
 		String errorMsg = null;
-		Collection<TrafficRecordAggregate> returnList = null;
+		List<TrafficRecordAggregate> returnList = null;
 		List<TrafficRecord> clientRecords = dao.getByClientId(clientId);
 		
 //		if(clientRecords == null || clientRecords.isEmpty()){
@@ -63,7 +63,7 @@ public class TrafficService {
 
 	public TrafficRecordSet getTrafficByClientForStore(int clientId, int storeId, DateRange dr) {
 		String errorMsg = null;
-		Collection<TrafficRecordAggregate> returnList = null;
+		List<TrafficRecordAggregate> returnList = null;
 		List<TrafficRecord> clientRecords = dao.getByClientId(clientId);
 		
 //		if(clientRecords == null || clientRecords.isEmpty()){
@@ -79,32 +79,24 @@ public class TrafficService {
 				returnList = get15MinAggregatesBetweenDates(storeRecords, dr);
 //			}			
 //		}
-		return new TrafficRecordSet(clientId, null, returnList, errorMsg);
+		return new TrafficRecordSet(clientId, storeId, returnList, errorMsg);
 	}
 	
 	
-	private Collection<TrafficRecordAggregate> get15MinAggregatesBetweenDates(List<TrafficRecord> records, DateRange dr) {
+	private List<TrafficRecordAggregate> get15MinAggregatesBetweenDates(List<TrafficRecord> records, DateRange dr) {
 		Date startDate = dr.getStartDate();
-		Date endDate = dr.getEndDate();
 		List<TrafficRecordAggregate> returnList = new ArrayList<TrafficRecordAggregate>();
 		//NOTE: this algorithm depends on the records being sorted by date, this is done in the TrafficDAO
 		
-		//loop to first row where startDate between start and end
-		//this could be a modified binarysearch but just going linear for now, may return if time
-		int recordPointer = 0;
-		while(records != null 
-				&& recordPointer < records.size() 
-				&& records.get(recordPointer).min5_dt.compareTo(startDate)<0){
-			recordPointer++;
-		}
-		
+		//set the recordPointer at the index for the first record before the startdate
+		int recordPointer = getIndexForFirstRecordBeforeDate(records,startDate);
+
 		//breakup start and end into list of ranges
 		List<Date> intervals = DateUtil.breakDateRangeIntoIntervals(dr,15); 
 		
 		logger.info("intervals are " + intervals);
 		
-		for(Date d: intervals){
-	
+		for(Date d: intervals){	
 			int enters = 0;
 			int exits = 0;	
 			
@@ -126,6 +118,20 @@ public class TrafficService {
 		}
 		
 		return returnList;
+	}
+
+	private int getIndexForFirstRecordBeforeDate(List<TrafficRecord> records, Date startDate) {
+		//TODO: Change to binary search
+		
+		
+		
+		int recordPointer = 0;
+		while(records != null 
+				&& recordPointer < records.size() 
+				&& records.get(recordPointer).min5_dt.compareTo(startDate)<0){
+			recordPointer++;
+		}
+		return recordPointer;
 	}
 
 	
