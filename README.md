@@ -1,3 +1,5 @@
+REST APIs built in Spring Boot to aggregate sample data from IOT devices placed in stores that track customer entrances and exits. Information from these devices come in at random intervals, and these APIs aggregate data to be displayed at 15 minute intervals.
+
 ## This is a **Gradle** project for **Spring Boot** based web service ##
 
 ## **Build** ##
